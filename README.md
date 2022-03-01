@@ -13,10 +13,20 @@
 
 ## 웹 크롤러의 작동 원리
 
-seed나 크롤링할 URL 목록을 받는 것으로 시작하여, 해당 URL의 웹사이트를 크롤링하여 데이터를 추출해낸다.
+웹 크롤러를 작동시키기 위해서는 크롤링할 대상 URL 목록들이 필요하다.
+이때, 이 목록에서 가장 처음 방문할 URL을 시드(seed)라고 부른다.
+이러한 시드를 포함하는 크롤링할 URL 목록을 받는 것으로 시작하여, 해당 URL의 웹사이트를 크롤링하여 데이터를 추출해낸다.
 해당 웹사이트를 크롤링하는 중에 다른 하이퍼링크를 찾아내면, 크롤링할 URL 목록에 해당 링크를 추가한다.
 이러한 과정이 반복되면 그 목록의 항목은 무한히 늘어날 수 있다.
 때문에, 크롤링할 URL의 목록을 선택하기 위해, 대상, 목적, 업데이트 빈도 등에 따른 정책을 설정하게 된다.
+
+- ### 크롤링 프론티어(Crawl frontier)
+크롤링 중에 탐색할 URL을 저장하고, 이후 탐색할 URL을 추가 및 선택하는 데에 유용한 형태의 데이터 구조이다.
+우선순위 큐(priority queue)와 유사한 형태를 띤다.
+![Architecture of a Web crawler](https://upload.wikimedia.org/wikipedia/commons/b/b2/WebCrawlerArchitecture.png)
+<!-- By Carlos Castillo = User:ChaTo - Source: PhD. Thesis of Carlos Castillo , image released under GFDL by the author., Public Domain, https://commons.wikimedia.org/w/index.php?curid=32927915 -->
+![Crawler Frontier architecture](https://upload.wikimedia.org/wikipedia/commons/0/00/Crawler_frontier_architecture.gif)
+<!-- By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669 -->
 
 ### 웹 크롤러의 사용 정책 및 방법
 
