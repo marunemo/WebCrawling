@@ -84,6 +84,6 @@
 ---
 
 [참고]\
-https://www.cloudflare.com/learning/bots/what-is-a-web-crawler/\
-https://en.wikipedia.org/wiki/Web_crawler\
+https://www.cloudflare.com/learning/bots/what-is-a-web-crawler/ </br>
+https://en.wikipedia.org/wiki/Web_crawler </br>
 https://en.wikipedia.org/wiki/Crawl_frontier
