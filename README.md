@@ -23,12 +23,12 @@
   우선순위 큐(priority queue)와 유사한 형태를 띤다.
   일반적으로 이후 설명될 웹 크롤러의 정책을 따르는데, 그 정책에는 다음에 방문해야 하는 페이지, 검색할 페이지의 우선순위, 페이지 방문 빈도 등이 포함될 수 있다.
   이러한 정책은 위에서 말했듯이 어마어마하게 많은 정보량을 처리함에 있어, 웹 크롤링의 효율성을 결정하는 데에 아주 중요한 역할을 한다.
-  ![Architecture of a Web crawler](https://upload.wikimedia.org/wikipedia/commons/b/b2/WebCrawlerArchitecture.png "By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669")<center>*웹 크롤링 구조*</center>
+  ![Architecture of a Web crawler](https://upload.wikimedia.org/wikipedia/commons/b/b2/WebCrawlerArchitecture.png "By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669")<center>*웹 크롤링 구조*</center>\
   <!-- By Carlos Castillo = User:ChaTo - Source: PhD. Thesis of Carlos Castillo , image released under GFDL by the author., Public Domain, https://commons.wikimedia.org/w/index.php?curid=32927915 -->
   크롤러는 프론티어에게 다음으로 방문할 페이지를 요청(request)하고, 현재 방문한 페이지에서의 새로운 하이퍼링크를 포함하는 응답(response)을 프론티어에 전송한다.
   이렇게 추가된 하이퍼링크(또는 URL)들은 프론티어에서 각 정책별로 점수가 매겨지게 되고, 이 점수를 기준으로 새로 방문할 페이지의 우선 순위가 결정된다.\
-  아래 그림에서는 Frontier API/Manager를 통해 웹 크롤러 봇과 통신하여 프론티어로 컨텐츠들을 주고받게 된다. Middlewares에서 Frontier API/Manager와 Backend를 연결하고, Backend에서는 앞서 말한 정책에 따라 프론티어를 관리하게 된다.
-  ![Crawler Frontier architecture](https://upload.wikimedia.org/wikipedia/commons/0/00/Crawler_frontier_architecture.gif "By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669")<center>*크롤링 프론티어 구조*</center>
+  아래 그림에서는 Frontier API/Manager를 통해 웹 크롤러 봇과 통신하여 프론티어로 컨텐츠들을 주고받게 된다. Middlewares에서 Frontier API/Manager와 Backend를 연결하고, Backend에서는 앞서 말한 정책에 따라 프론티어를 관리하게 된다.\
+  ![Crawler Frontier architecture](https://upload.wikimedia.org/wikipedia/commons/0/00/Crawler_frontier_architecture.gif "By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669")<center>*크롤링 프론티어 구조*</center>\
   <!-- By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669 -->
 
 ### 웹 크롤러의 사용 정책 및 방법
