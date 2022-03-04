@@ -75,16 +75,21 @@
 
 - ### **Robots.txt**에 따라
   Robots Exclusion Protocol이라고도 불리며, 해당 텍스트 파일에 따라 어떤 페이지를 크롤링할 지에 대해 결정한다.
-  웹 크롤러들은 웹페이지를 탐색하기 전에 웹 서버로부터 호스팅 되는 이 Robots.txt 텍스트 파일을 확인하게 된다.
-  이는 즉, 웹 사이트나 프로그램에 액세스하는 크롤링 봇들에 대해 데이터를 얻을 수 있는 지 없는 지에 대한 규칙을 정해주는 일종의 윤리인 셈이다.
+  웹 크롤러들은 웹페이지를 탐색하기 전에 웹 서버로부터 호스팅 되는 이 robots.txt 텍스트 파일을 확인하게 된다.
+  robots.txt 파일은 주로 사이트의 크롤러 트래픽을 관리하기 위해 사용되며, 그 중에서도 주로 사이트에 대한 요청으로 인해 서버가 오버로드되는 것을 방지하기 위해 사용된다.
+  하지만 이 파일은 웹 사이트나 프로그램에 액세스하는 크롤링 봇들에 대해 데이터를 얻을 수 있는 지 없는 지에 대한 규칙을 정해주지만, 크롤러를 강제로 통제할 수 없기 때문에 어디까지나 일종의 윤리인 셈이다.
 
-  - #### 서버 개발자의 관점에서의 웹 크롤링
+  - #### 서버 개발자의 관점에서의 robots.txt
     웹 크롤러가 웹 컨텐츠들을 인덱싱하기 위해서는 서버에 리소스를 요청(request)해야 한다.
     그러나 요청되는 데이터의 양이 너무 많거나 리소스를 너무 빈번하게 요청하게 되면, 서버에 과부하가 걸리거나 서버에 부담되는 대역폭에 따른 비용(bandwidth cost)이 커지게 된다.
     따라서 서버나 웹을 운영하는 입장에서는 이러한 상황을 막기 위해, 일반적으로 웹 크롤러의 컨텐츠 인덱싱을 너무 자주 허용하지 않도록 설정한다.
+    때문에 사람들에 맞는 메세지를 제공하거나 페이지 검색 성능을 강화하기 위해, robots.txt 파일에 **"disallow"** 태그를 추가하는 등의 방법으로 검색 엔진과 같은 웹 크롤러가 해당 페이지를 크롤링하는 것을 막게 된다.
 
     게다가 몇몇 개발자가 기업의 입장에서는 일부 웹페이지를 크롤링하는 것을 꺼려할 수 있다.
-    때문에 사람들에 맞는 메세지를 제공하거나 페이지 검색 성능을 강화하기 위해, robots.txt 파일에 **"disallow"** 태그를 추가하는 등의 방법으로 검색 엔진과 같은 웹 크롤러가 해당 페이지를 크롤링하지 않도록 하게 된다.
+    이 경우에는 **noindex**로 색인 생성을 차단하거나 비밀번호로 페이지를 보호하는 방식을 사용하여, 사이트가 검색 색인등의 목적으로 크롤링되는 것을 막을 수 있다.
+    하지만 이러한 robots.txt 파일을 사용하여 페이지가 크롤링되는 것은 차단될 수 있지만, URL을 통한 접근은 여전히 숨겨지지 않는다는 점을 유의해야 한다.
+
+    단, robots.txt 명령어는 어디까지나 지침일 뿐 크롤러의 동작을 강제할 수 없기 때문에, 몇몇 크롤러는 이러한 지침을 준수하지 않을 수 있다. 게다가, robots.txt 파일의 지침을 따르더라도 웹 크롤러에 따라 특정 지침을 이해하지 못하거나 다르게 해석할 수 있으므로, 다양한 웹 크롤러에 적용될 수 있는 적절한 구문을 이해해야 한다. robots.txt 파일에서 허용되지 않은 페이지라도 다른 사이트를 통해 연결된 경우에도, 해당 페이지로 크롤러가 접근할 수 있다. 그렇기 때문에 웹 크롤러로부터 정보를 안전하게 보호하기 위해서는 서버의 파일을 비공개로 전환하여 비밀번호로 보호하는 등의 다른 차단 방법을 사용해야 한다.
 
   - #### 웹 스크래핑
     > 크롤러를 사용하여 허가 없이 웹사이트의 컨텐츠를 다운로드하는 경우
@@ -104,5 +109,7 @@ https://www.cloudflare.com/learning/bots/what-is-a-web-crawler/ </br>
 https://en.wikipedia.org/wiki/Web_crawler </br>
 https://en.wikipedia.org/wiki/Crawl_frontier </br>
 ### **구글에서 말하는 검색 엔진을 위한 웹 크롤러**
-https://www.google.com/intl/ko/search/howsearchworks/crawling-indexing/
-https://developers.google.com/search/docs/advanced/sitemaps/overview?hl=ko&visit_id=637819895250469830-3265437114&rd=1
+https://www.google.com/intl/ko/search/howsearchworks/crawling-indexing/ </br>
+https://developers.google.com/search/docs/advanced/sitemaps/overview?hl=ko&visit_id=637819895250469830-3265437114&rd=1 </br>
+https://developers.google.com/search/docs/advanced/robots/intro </br>
+https://developers.google.com/search/docs/advanced/crawling/block-indexing
