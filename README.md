@@ -40,8 +40,8 @@
   </p>
   <!-- By Carlos Castillo = User:ChaTo - Source: PhD. Thesis of Carlos Castillo , image released under GFDL by the author., Public Domain, https://commons.wikimedia.org/w/index.php?curid=32927915 -->
   크롤러는 프론티어에게 다음으로 방문할 페이지를 요청(request)하고, 현재 방문한 페이지에서의 새로운 하이퍼링크를 포함하는 응답(response)을 프론티어에 전송한다.
-  이렇게 추가된 하이퍼링크(또는 URL)들은 프론티어에서 각 정책별로 점수가 매겨지게 되고, 이 점수를 기준으로 새로 방문할 페이지의 우선 순위가 결정된다.\
-  아래 그림에서는 Frontier API/Manager를 통해 웹 크롤러 봇과 통신하여 프론티어로 컨텐츠들을 주고받게 된다. Middlewares에서 Frontier API/Manager와 Backend를 연결하고, Backend에서는 앞서 말한 정책에 따라 프론티어를 관리하게 된다.\
+  이렇게 추가된 하이퍼링크(또는 URL)들은 프론티어에서 각 정책별로 점수가 매겨지게 되고, 이 점수를 기준으로 새로 방문할 페이지의 우선 순위가 결정된다.
+  아래 그림에서는 Frontier API/Manager를 통해 웹 크롤러 봇과 통신하여 프론티어로 컨텐츠들을 주고받게 된다. Middlewares에서 Frontier API/Manager와 Backend를 연결하고, Backend에서는 앞서 말한 정책에 따라 프론티어를 관리하게 된다.
   <p align="center" style="margin: 5% 5%">
     <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Crawler_frontier_architecture.gif" title="By Lequintanilla - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=56558669" alt="Crawler Frontier architecture" width="80%"></br>
     <b><i>크롤링 프론티어 구조</i></b>
