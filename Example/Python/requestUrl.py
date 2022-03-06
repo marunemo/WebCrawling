@@ -13,6 +13,18 @@ print(res.url)
 # [ref] https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C
 print(res.status_code)
 
+# 헤더의 meta 태그의 컨텐츠 타입 확인
+print(res.headers["content-type"])
+
+# 인코딩 방식 추출
+print(res.encoding)
+
+# 인코딩 방식 변경
+encodingSetting = {"Content-Type" : "text/html; charset=utf-8"}
+res = requests.get("https://www.google.co.kr" + tab, params=getParams, headers=encodingSetting, timeout=1)
+print(res.headers["content-type"])
+print(res.encoding)
+
 # 결과 html 파일 출력
 f = open("result.html", "w")
 f.write(res.text)
