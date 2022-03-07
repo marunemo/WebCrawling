@@ -1,3 +1,5 @@
+# [ref] https://beautiful-soup-4.readthedocs.io/en/latest/
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,6 +11,9 @@ if res.status_code == 200:
     html = res.text
     parsedHtml = BeautifulSoup(html, 'html.parser')
     print(type(parsedHtml))
-    print(parsedHtml)
+    
+    f = open("result.html", "w", encoding="utf-8")
+    f.write(parsedHtml.prettify())
+    f.close()
 else:
-    print(res.status_code)
+    print(res.status_code) 
