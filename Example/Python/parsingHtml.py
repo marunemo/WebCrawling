@@ -11,9 +11,27 @@ if res.status_code == 200:
     html = res.text
     parsedHtml = BeautifulSoup(html, 'html.parser')
     print(type(parsedHtml))
+
+    print(parsedHtml.title)
+    # -> <title>Google</title>
+    print(parsedHtml.title.name)
+    # -> title
+    print(parsedHtml.title.string)
+    # -> Google
+    print(parsedHtml.title.parent)
+    # -> head 태그의 모든 것
+    print(parsedHtml.title.parent.name)
+    # -> head
+    print(parsedHtml.title.parent.string)
+    # -> None
     
-    f = open("result.html", "w", encoding="utf-8")
-    f.write(parsedHtml.prettify())
-    f.close()
+    print(type(parsedHtml.div))
+    # <class 'bs4.element.Tag'>
+    print(parsedHtml.div)
+    # div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
+
+    # f = open("result.html", "w", encoding="utf-8")
+    # f.write(parsedHtml.prettify())
+    # f.close()
 else:
     print(res.status_code) 
