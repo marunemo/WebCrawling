@@ -28,7 +28,7 @@ if res.status_code == 200:
     print(type(parsedHtml.div))
     # -> <class 'bs4.element.Tag'>
     print(parsedHtml.div)
-    # -> div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
+    # -> 현재 최상위에 속해 있는 div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
 
     print(parsedHtml.input)
     # -> <input name="ie" type="hidden" value="EUC-KR"/>
@@ -38,6 +38,11 @@ if res.status_code == 200:
     # -> hidden
     print(parsedHtml.input["value"])
     # -> EUC-KR
+    
+    print(type(parsedHtml.find_all("input")))
+    # -> <class 'bs4.element.ResultSet'>
+    print(parsedHtml.find_all("input"))
+    # -> 상위 태그에 상속되어 있는 모든 input 태그들 ResultSet의 형태로 출력
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
