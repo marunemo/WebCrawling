@@ -38,6 +38,8 @@ if res.status_code == 200:
     # -> hidden
     print(parsedHtml.input["value"])
     # -> EUC-KR
+    print(parsedHtml.input.get("value"))
+    # -> EUC-KR
     
     print(type(parsedHtml.find_all("input")))
     # -> <class 'bs4.element.ResultSet'>
