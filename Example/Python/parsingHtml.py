@@ -26,9 +26,18 @@ if res.status_code == 200:
     # -> None
     
     print(type(parsedHtml.div))
-    # <class 'bs4.element.Tag'>
+    # -> <class 'bs4.element.Tag'>
     print(parsedHtml.div)
-    # div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
+    # -> div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
+
+    print(parsedHtml.input)
+    # -> <input name="ie" type="hidden" value="EUC-KR"/>
+    print(parsedHtml.input["name"])
+    # -> ie
+    print(parsedHtml.input["type"])
+    # -> hidden
+    print(parsedHtml.input["value"])
+    # -> EUC-KR
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
