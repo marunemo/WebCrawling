@@ -57,6 +57,16 @@ if res.status_code == 200:
     # -> <input name="ie" test="temp" type="hidden" value="EUC-KR"/>
     print(parsedHtml.input.attrs)
     # -> {'name': 'ie', 'value': 'EUC-KR', 'type': 'hidden', 'test': 'temp'}
+    parsedHtml.input["test"] = ["temp", "my temp"]
+    # input 태그에 새로운 속성 복수 추가
+    print(parsedHtml.input)
+    # -> <input name="ie" test="temp my temp" type="hidden" value="EUC-KR"/>
+    print(parsedHtml.input.attrs)
+    # -> {'name': 'ie', 'value': 'EUC-KR', 'type': 'hidden', 'test': ['temp', 'my temp']}
+    print(type(parsedHtml.input.attrs))
+    # -> <class 'dict'>
+    print(type(parsedHtml.input.attrs["test"]))
+    # -> <class 'list'>
 
     del parsedHtml.input["type"]
     # input 태그에 새로운 속성 삭제
