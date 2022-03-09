@@ -32,7 +32,9 @@ if res.status_code == 200:
     print(type(parsedHtml.div))
     # -> <class 'bs4.element.Tag'>
     print(parsedHtml.div)
-    # -> 현재 최상위에 속해 있는 div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
+    # -> 맨 처음 나타나는 div 태그
+    print(parsedHtml.body.div.div)
+    # -> body에서 맨 처음 나타나는 div 태그 안의 맨 처음 나타나는 div 태그
 
     '''
     태그의 속성의 추가, 조회, 삭제
