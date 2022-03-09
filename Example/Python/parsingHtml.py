@@ -137,10 +137,15 @@ if res.status_code == 200:
     print(parsedHtml.title)
     # -> <title>구글2</title>
 
+    '''
+    태그 탐색
+    '''
     print(type(parsedHtml.find_all("input")))
     # -> <class 'bs4.element.ResultSet'>
     print(parsedHtml.find_all("input"))
-    # -> 상위 태그에 상속되어 있는 모든 input 태그들 ResultSet의 형태로 출력
+    # -> 상위 태그에 상속되어 있는 모든 input 태그들을 ResultSet의 형태로 출력
+    print(parsedHtml.find_all(["title", "input"]))
+    # -> 상위 태그에 상속되어 있는 모든 title 태그와 input 태그들을 ResultSet의 형태로 출력
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
