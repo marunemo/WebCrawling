@@ -14,7 +14,7 @@ if res.status_code == 200:
 
     '''
     태그의 접근과 태그의 프로퍼티
-    (name, string, parent)
+    (name, string, parent, children(== contents), descendants)
     '''
     print(parsedHtml.title)
     # -> <title>Google</title>
@@ -28,6 +28,22 @@ if res.status_code == 200:
     # -> head
     print(parsedHtml.title.parent.string)
     # -> None
+    print("=" * 20)
+    for child in parsedHtml.head.children:
+        print(child.name)
+    print("=" * 20)
+    # -> ㄱ
+    # meta
+    # meta
+    # title
+    # script
+    # style
+    # style
+    # script
+    print(parsedHtml.title.chlidren)
+    # -> None (태그만을 children으로 간주)
+    print(list(parsedHtml.title.descendants))
+    # -> ['Google'] (스트링까지 children으로 간주)
     
     print(type(parsedHtml.div))
     # -> <class 'bs4.element.Tag'>
