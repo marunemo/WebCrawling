@@ -32,6 +32,8 @@ if res.status_code == 200:
 
     print(parsedHtml.input)
     # -> <input name="ie" type="hidden" value="EUC-KR"/>
+    print(parsedHtml.input.attrs)
+    # -> {'name': 'ie', 'value': 'EUC-KR', 'type': 'hidden'}
     print(parsedHtml.input["name"])
     # -> ie
     print(parsedHtml.input["type"])
