@@ -83,8 +83,8 @@ if res.status_code == 200:
     # meta
 
     '''
-    태그의 속성의 추가, 조회, 삭제
-    (attrs, get, dict 방식의 추가, 조회, 삭제)
+    태그의 속성의 추가, 조회, 삭제, 검색
+    (attrs, get, dict 방식의 추가, 조회, 삭제, has_attr)
     '''
     print(parsedHtml.input)
     # -> <input name="ie" type="hidden" value="EUC-KR"/>
@@ -123,6 +123,11 @@ if res.status_code == 200:
     print(parsedHtml.input.attrs)
     # -> {'name': 'ie', 'value': 'EUC-KR', 'test': 'temp'}
     
+    print(parsedHtml.input.has_attr("test"))
+    # -> True
+    print(parsedHtml.input.has_attr("type"))
+    # -> False
+
     '''
     태그 내 문자열의 조회 및 변경
     '''
