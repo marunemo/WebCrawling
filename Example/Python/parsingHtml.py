@@ -12,6 +12,10 @@ if res.status_code == 200:
     parsedHtml = BeautifulSoup(html, 'html.parser')
     print(type(parsedHtml))
 
+    '''
+    태그의 접근과 태그의 프로퍼티
+    (name, string, parent)
+    '''
     print(parsedHtml.title)
     # -> <title>Google</title>
     print(parsedHtml.title.name)
@@ -30,6 +34,10 @@ if res.status_code == 200:
     print(parsedHtml.div)
     # -> 현재 최상위에 속해 있는 div 태그들이 띄어쓰기나 줄 바꿈 없이 전부 출력
 
+    '''
+    태그의 속성의 추가, 조회, 삭제
+    (attrs, get, dict 방식의 추가, 조회, 삭제)
+    '''
     print(parsedHtml.input)
     # -> <input name="ie" type="hidden" value="EUC-KR"/>
     print(parsedHtml.input.attrs)
@@ -42,6 +50,20 @@ if res.status_code == 200:
     # -> EUC-KR
     print(parsedHtml.input.get("value"))
     # -> EUC-KR
+
+    parsedHtml.input["test"] = "temp"
+    # input 태그에 새로운 속성 추가
+    print(parsedHtml.input)
+    # -> <input name="ie" test="temp" type="hidden" value="EUC-KR"/>
+    print(parsedHtml.input.attrs)
+    # -> {'name': 'ie', 'value': 'EUC-KR', 'type': 'hidden', 'test': 'temp'}
+
+    del parsedHtml.input["type"]
+    # input 태그에 새로운 속성 삭제
+    print(parsedHtml.input)
+    # -> <input name="ie" test="temp" value="EUC-KR"/>
+    print(parsedHtml.input.attrs)
+    # -> {'name': 'ie', 'value': 'EUC-KR', 'test': 'temp'}
     
     print(type(parsedHtml.find_all("input")))
     # -> <class 'bs4.element.ResultSet'>
