@@ -14,7 +14,7 @@ if res.status_code == 200:
 
     '''
     태그의 접근과 태그의 프로퍼티
-    (name, string, parent, children(== contents), descendants)
+    (name, string, parent(going up), children, contents, descendants(going down))
     '''
     print(parsedHtml.title)
     # -> <title>Google</title>
@@ -40,10 +40,14 @@ if res.status_code == 200:
     # style
     # style
     # script
-    print(parsedHtml.title.chlidren)
-    # -> None (태그만을 children으로 간주)
-    print(list(parsedHtml.title.descendants))
-    # -> ['Google'] (스트링까지 children으로 간주)
+    print(parsedHtml.title)
+    # -> <title>Google</title>
+    print(type(parsedHtml.head.children), len(list(parsedHtml.head.children)))
+    # -> <class 'list_iterator'> 7 (태그만을 children으로 간주)
+    print(type(parsedHtml.head.contents), len(parsedHtml.head.contents))
+    # -> 7 (태그만을 children으로 간주)
+    print(len(list(parsedHtml.head.descendants)))
+    # -> 12 (스트링까지 children으로 간주)
     
     print(type(parsedHtml.div))
     # -> <class 'bs4.element.Tag'>
@@ -51,6 +55,32 @@ if res.status_code == 200:
     # -> 맨 처음 나타나는 div 태그
     print(parsedHtml.body.div.div)
     # -> body에서 맨 처음 나타나는 div 태그 안의 맨 처음 나타나는 div 태그
+
+    '''
+    태그의 iterator
+    '''
+    print(parsedHtml.head.contents[0].name)
+    # -> meta
+    print("===== next sibling ===== :", parsedHtml.head.contents[0].name)
+    for sibling in parsedHtml.head.contents[0].next_siblings:
+        print(sibling.name)
+    # -> ㄱ
+    # meta
+    # title
+    # script
+    # style
+    # style
+    # script
+    print("===== previous sibling ===== :", parsedHtml.head.contents[-1].name)
+    for sibling in parsedHtml.head.contents[-1].previous_siblings:
+        print(sibling.name)
+    # -> ㄱ
+    # style
+    # style
+    # script
+    # title
+    # meta
+    # meta
 
     '''
     태그의 속성의 추가, 조회, 삭제
