@@ -151,6 +151,12 @@ if res.status_code == 200:
     # -> 상위 태그에 상속되어 있는 모든 input 태그들을 ResultSet의 형태로 출력
     print(parsedHtml.find_all(["title", "input"]))
     # -> 상위 태그에 상속되어 있는 모든 title 태그와 input 태그들을 ResultSet의 형태로 출력
+    print(parsedHtml.find_all(lambda tag : tag.has_attr("value") and not tag.has_attr('test')))
+    # -> value 속성을 가지고 있으며, test 속성을 가지고 있지 않은 태그들 출력
+    print(parsedHtml.find_all(lambda tag : tag.name == "input" and tag.has_attr("value") and not tag.has_attr('test')))
+    # -> value 속성을 가지고 있으며, test 속성을 가지고 있지 않은 input 태그들 출력
+    print(parsedHtml.find_all(lambda tag : tag.name == "input" and tag.has_attr("value") and not tag.has_attr('test') and "type" in tag.attrs and tag["type"] == "hidden"))
+    # -> value 속성을 가지고 있으며, test 속성을 가지고 있지 않은 hidden 타입의 input 태그들 출력
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
