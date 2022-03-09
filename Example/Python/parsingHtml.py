@@ -75,6 +75,20 @@ if res.status_code == 200:
     print(parsedHtml.input.attrs)
     # -> {'name': 'ie', 'value': 'EUC-KR', 'test': 'temp'}
     
+    '''
+    태그 내 문자열의 조회 및 변경
+    '''
+    print(parsedHtml.title)
+    # -> <title>Google</title>
+    print(parsedHtml.title.string)
+    # -> Google
+    parsedHtml.title.string = "구글1"
+    print(parsedHtml.title)
+    # -> <title>구글1</title>
+    parsedHtml.title.string.replace_with("구글2")
+    print(parsedHtml.title)
+    # -> <title>구글2</title>
+
     print(type(parsedHtml.find_all("input")))
     # -> <class 'bs4.element.ResultSet'>
     print(parsedHtml.find_all("input"))
