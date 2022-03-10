@@ -179,6 +179,16 @@ if res.status_code == 200:
     print(parsedHtml.find_all(attrs={"class" : "gb1"}))
     # -> class 속성에 gb1을 포함하는 태그들 출력
     # ==> 파이썬 내에 class라는 키워드가 존재하므로, class 속성을 찾기 위해서는 class_라는 별칭이나 딕셔너리 객체를 사용해야 함
+    print(parsedHtml.find_all(class_="lst"))
+    # -> class 속성에 lst을 포함하는 태그들 출력 ([<input autocomplete="off" class="lst tiah" maxlength="2048" ... />])
+    print(parsedHtml.find_all(class_="tiah"))
+    # -> class 속성에 tiah을 포함하는 태그들 출력 ([<input autocomplete="off" class="lst tiah" maxlength="2048" ... />])
+    print(parsedHtml.find_all(class_="lst tiah"))
+    # -> class 속성에 lst tiah을 포함하는 태그들 출력 ([<input autocomplete="off" class="lst tiah" maxlength="2048" ... />])
+    print(parsedHtml.find_all(class_="tiah lst"))
+    # -> class 속성에 tiah lst을 포함하는 태그들 출력 ([])
+    print(parsedHtml.select(".tiah.lst"))
+    # -> class 속성에 tiah와 lst를 모두 포함하는 태그들 출력 ([<input autocomplete="off" class="lst tiah" maxlength="2048" ... />])
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
