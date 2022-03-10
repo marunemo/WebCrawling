@@ -167,11 +167,18 @@ if res.status_code == 200:
     # -> id가 gbv이고, type이 hidden인 input 태그들 출력
     print(parsedHtml.find_all("input", attrs={"id" : "gbv", "type": "hidden"}))
     # -> id가 gbv이고, type이 hidden인 input 태그들 출력
+    
     print(parsedHtml.find_all(name="gbv"))
     # -> []
     print(parsedHtml.find_all(attrs={"name" : "gbv"}))
     # -> [<input id="gbv" name="gbv" type="hidden" value="1"/>]
     # ==> 태그의 이름을 가리키는 name 키워드와 중첩되므로, name 속성을 찾기 위해서는 attrs에 딕셔너리 객체를 넣어 찾는 방법 밖에 없음
+    
+    print(parsedHtml.find_all(class_="gb1"))
+    # -> class 속성에 gb1을 포함하는 태그들 출력
+    print(parsedHtml.find_all(attrs={"class" : "gb1"}))
+    # -> class 속성에 gb1을 포함하는 태그들 출력
+    # ==> 파이썬 내에 class라는 키워드가 존재하므로, class 속성을 찾기 위해서는 class_라는 별칭이나 딕셔너리 객체를 사용해야 함
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
