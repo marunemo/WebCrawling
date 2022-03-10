@@ -165,6 +165,8 @@ if res.status_code == 200:
     # -> id가 gbv이고, type이 hidden인 태그들 출력
     print(parsedHtml.find_all("input", id="gbv", type="hidden"))
     # -> id가 gbv이고, type이 hidden인 input 태그들 출력
+    print(parsedHtml.find_all("input", attrs={"id" : "gbv", "type": "hidden"}))
+    # -> id가 gbv이고, type이 hidden인 input 태그들 출력
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
