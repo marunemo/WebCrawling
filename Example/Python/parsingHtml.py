@@ -192,8 +192,9 @@ if res.status_code == 200:
     print(parsedHtml.select("html > head > meta"))
     # -> html 태그 안의 head 태그 안에 있는 모든 meta 태그들 출력
 
-    # f = open("result.html", "w", encoding="utf-8")
-    # f.write(parsedHtml.prettify())
-    # f.close()
+    # html의 형태로 저장(prettify로 자동 정렬 및 레이아웃)
+    f = open("result.html", "w", encoding="utf-8")
+    f.write(parsedHtml.prettify())
+    f.close()
 else:
     print(res.status_code) 
