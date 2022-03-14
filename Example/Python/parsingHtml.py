@@ -189,6 +189,8 @@ if res.status_code == 200:
     # -> class 속성에 tiah lst을 포함하는 태그들 출력 ([])
     print(parsedHtml.select(".tiah.lst"))
     # -> class 속성에 tiah와 lst를 모두 포함하는 태그들 출력 ([<input autocomplete="off" class="lst tiah" maxlength="2048" ... />])
+    print(parsedHtml.select("html > head > meta"))
+    # -> html 태그 안의 head 태그 안에 있는 모든 meta 태그들 출력
 
     # f = open("result.html", "w", encoding="utf-8")
     # f.write(parsedHtml.prettify())
