@@ -53,13 +53,13 @@ for url in seed:
 
     # table 태그의 각 열과 행의 데이터 수집
     for row in targetTable.children:
-        if row.name:
+        if row.name == "tr":
             for data in row.children:
                 if data.string != None:
-                    resultCSV.write(data.string)
+                    resultCSV.write(data.string.strip())
                 else:
                     for text in data.children:
-                        resultCSV.write(data.get_text(separator=" "))
+                        resultCSV.write(data.get_text(separator=" ").strip())
                 resultCSV.write(",")
             resultCSV.write("\n")
 
