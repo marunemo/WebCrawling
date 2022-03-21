@@ -51,6 +51,7 @@ for url in seed:
     while targetTable.name != "table":
         targetTable = targetTable.parent
 
+    # table 태그의 각 열과 행의 데이터 수집
     for row in targetTable.children:
         if row.name:
             for data in row.children:
@@ -58,7 +59,7 @@ for url in seed:
                     resultCSV.write(data.string)
                 else:
                     for text in data.children:
-                        resultCSV.write(text.string + " ")
+                        resultCSV.write(data.get_text(separator=" "))
                 resultCSV.write(",")
             resultCSV.write("\n")
 
