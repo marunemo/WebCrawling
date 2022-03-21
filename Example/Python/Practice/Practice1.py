@@ -12,7 +12,7 @@ if robotsTxt.status_code != 200:
     raise Exception("HTTP 상태 코드: " + str(robotsTxt.status_code))
 
 # 결과 출력 파일
-resultCSV = open("result.csv", "w")
+resultCSV = open("result.csv", "w", encoding="utf-8")
 
 # 크롤링할 수 있는 지 탐색
 searchAble = {"User-agent" : [], "Allow" : [], "Disallow" : []}
