@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs
+from bs4.element import NavigableString
 
 # 대상 URL
 targetURL = "https://www.badatime.com"
@@ -57,16 +58,18 @@ for url in seed:
     for row in targetTable.children:
         if row.name == "tr":
             for data in row.children:
-                resultCSV.write("\"")
-                if data.string != None:
-                    resultCSV.write(data.string.strip())
+                if data.name != "td":
+                    continue
+                parsingText = ""
+                if type(data) == NavigableString:
+                    parsingText += data.strip()
                 else:
-                    for text in data.children:
-                        if text.string != None:
-                            resultCSV.write(text.string.strip())
+                    for text in data.descendants:
+                        if type(text) == NavigableString:
+                            parsingText += text.strip()
                         elif text.name == "br":
-                            resultCSV.write(" ")
-                resultCSV.write("\",")
+                            parsingText += " "
+                resultCSV.write("\"" + parsingText.strip() + "\", ")
             resultCSV.write("\n")
 
 resultCSV.close()
