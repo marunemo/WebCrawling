@@ -19,8 +19,11 @@ for line in robotsTxt.text.replace("\r", "").split("\n"):
         searchAble[key].extend(value.split())
     else:
         searchAble[key] = [value]
+print(searchAble)
 
-seed = []
+seed = [targetURL + "/img/1"]
 for url in seed:
-    if "*" in searchAble["User-agent"] and url.replace(targetURL, "") in searchAble["Disallow"]:
-        raise Exception(url + "에 접근이 제한되어있습니다.")
+    if "*" in searchAble["User-agent"]:
+        for disallowPath in searchAble["Disallow"]:
+            if targetURL + disallowPath in url:
+                raise Exception(url + "은 " + disallowPath + "에 의하여 접근이 제한되어있습니다.")
