@@ -23,9 +23,11 @@ for line in robotsTxt.text.replace("\r", "").split("\n"):
     else:
         searchAble[key] = [value]
 
-# 주어진 URL들로부터 html 데이터 탐색
+# 탐색할 URL 시드 입력
 seed = []
 seed.append("https://www.badatime.com/127-2022-09-01.html")
+
+# 주어진 URL들로부터 html 데이터 탐색
 for url in seed:
     if "*" in searchAble["User-agent"]:
         for disallowPath in searchAble["Disallow"]:
@@ -55,12 +57,16 @@ for url in seed:
     for row in targetTable.children:
         if row.name == "tr":
             for data in row.children:
+                resultCSV.write("\"")
                 if data.string != None:
                     resultCSV.write(data.string.strip())
                 else:
                     for text in data.children:
-                        resultCSV.write(data.get_text(separator=" ").strip())
-                resultCSV.write(",")
+                        if text.string != None:
+                            resultCSV.write(text.string.strip())
+                        elif text.name == "br":
+                            resultCSV.write(" ")
+                resultCSV.write("\",")
             resultCSV.write("\n")
 
 resultCSV.close()
