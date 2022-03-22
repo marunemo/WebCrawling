@@ -56,23 +56,15 @@ for url in seed:
         targetTable = targetTable.parent
 
     # table 태그의 각 열과 행의 데이터 수집
-    count = 0
-    for row in targetTable.children:
-        if row.name == "tr":
-            for data in row.children:
-                if type(data) != Tag:
-                    print(data.encode("unicode_escape").decode("utf-8"))
-                    continue
+    # 추출한 html 파일의 </td> 태그(closing tag) 누락 문제로 children 프로퍼티 대신 find_all 메서드 사용
+    for row in targetTable.find_all("tr"):
+        for data in row.children:
+            if data.name == "td":
                 parsingText = ""
                 for text in data.descendants:
                     if type(text) == NavigableString:
                         parsingText += text.strip()
-                    elif text.name == "br":
-                        parsingText += " "
-                resultCSV.write("\"" + parsingText.strip() + "\", ")
-            resultCSV.write("\n")
-        count += 1
-        if count == 10:
-            break
+                resultCSV.write("\"" + parsingText.strip() + "\",")
+        resultCSV.write("\n")
 
 resultCSV.close()
