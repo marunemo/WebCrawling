@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs
-from bs4.element import NavigableString
+from bs4.element import NavigableString, Tag
 
 # 대상 URL
 targetURL = "https://www.badatime.com"
@@ -45,6 +45,7 @@ for url in seed:
         print("접속 실패 : " + url)
     
     # beautiful soup 객체 변환
+    # html = bs(res.text, "html.parser")
     html = bs(res.text, "html.parser")
 
     # 만조시각 텍스트를 가진 태그 탐색
@@ -55,21 +56,23 @@ for url in seed:
         targetTable = targetTable.parent
 
     # table 태그의 각 열과 행의 데이터 수집
+    count = 0
     for row in targetTable.children:
         if row.name == "tr":
             for data in row.children:
-                if data.name != "td":
+                if type(data) != Tag:
+                    print(data.encode("unicode_escape").decode("utf-8"))
                     continue
                 parsingText = ""
-                if type(data) == NavigableString:
-                    parsingText += data.strip()
-                else:
-                    for text in data.descendants:
-                        if type(text) == NavigableString:
-                            parsingText += text.strip()
-                        elif text.name == "br":
-                            parsingText += " "
+                for text in data.descendants:
+                    if type(text) == NavigableString:
+                        parsingText += text.strip()
+                    elif text.name == "br":
+                        parsingText += " "
                 resultCSV.write("\"" + parsingText.strip() + "\", ")
             resultCSV.write("\n")
+        count += 1
+        if count == 10:
+            break
 
 resultCSV.close()
