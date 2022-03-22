@@ -15,9 +15,9 @@ def tableDataParsing(td, csvFile):
                 # 만약 </br>이라면 줄내림 대신 띄어쓰기로 처리
                 csvFile.write(" ")
             elif data.name == "td":
-                # 만약 td 태그 내에 td가 상속되어 있다면 해당 태그를 td 태그로서 처리
+                # td 태그에 상속되어 있는 td 태그의 경우,
+                # tr과 달리 상속된 태그의 텍스트로서 추출이 가능하나 서로 다른 td끼리 분리시켜야 하므로 ", "만 입력
                 csvFile.write(", ")
-                tableDataParsing(data, csvFile)
             elif data.name == "tr":
                 # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
