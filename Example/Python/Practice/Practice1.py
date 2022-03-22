@@ -2,6 +2,44 @@ import requests
 from bs4 import BeautifulSoup as bs
 from bs4.element import NavigableString, Tag
 
+# 열의 데이터 중 문자열만 추출하여 작성
+# </td>(td closing tag)가 없을 경우에 td 태그에 상속되어 있는 tr이나 td를 재귀적으로 처리
+def tableDataParsing(td, csvFile):
+    # td 안의 텍스트와 태그를 모두 추출
+    for data in td.descendants:
+        if type(data) == NavigableString:
+            # td 내부의 텍스트는 상속된 태그에 관계없이 하나의 텍스트로 간주
+            csvFile.write(data.strip())
+        elif type(data) == Tag:
+            if data.name == "br":
+                # 만약 </br>이라면 줄내림 대신 띄어쓰기로 처리
+                csvFile.write(" ")
+            elif data.name == "td":
+                # 만약 td 태그 내에 td가 상속되어 있다면 해당 태그를 td 태그로서 처리
+                csvFile.write(", ")
+                tableDataParsing(data, csvFile)
+            elif data.name == "tr":
+                # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
+                # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
+                csvFile.write("\n")
+                tableRowParsing(data, csvFile)
+                break
+
+# 행에서 td 태그만 추려내어 데이터 탐색
+def tableRowParsing(tr, csvFile):
+    for col in tr.children:
+        if type(col) == Tag and col.name == "td":
+            tableDataParsing(col, csvFile)
+            csvFile.write(", ")
+
+# 추출한 html 파일의 </td> 태그(closing tag) 누락 문제로 함수의 형태로 사용
+# tableRowParsing과 tableDataParsing을 이용한 재귀적인 처리를 위함
+def tableToCSV(table, csvFile):
+    for row in table.children:
+        if type(row) == Tag and row.name == "tr":
+            tableRowParsing(row, csvFile)
+            csvFile.write('\n')
+
 # 대상 URL
 targetURL = "https://www.badatime.com"
 
@@ -56,15 +94,6 @@ for url in seed:
         targetTable = targetTable.parent
 
     # table 태그의 각 열과 행의 데이터 수집
-    # 추출한 html 파일의 </td> 태그(closing tag) 누락 문제로 children 프로퍼티 대신 find_all 메서드 사용
-    for row in targetTable.find_all("tr"):
-        for data in row.children:
-            if data.name == "td":
-                parsingText = ""
-                for text in data.descendants:
-                    if type(text) == NavigableString:
-                        parsingText += text.strip()
-                resultCSV.write("\"" + parsingText.strip() + "\",")
-        resultCSV.write("\n")
+    tableToCSV(targetTable, resultCSV)
 
 resultCSV.close()
