@@ -5,25 +5,32 @@ from bs4.element import NavigableString, Tag
 # 열의 데이터 중 문자열만 추출하여 작성
 # </td>(td closing tag)가 없을 경우에 td 태그에 상속되어 있는 tr이나 td를 재귀적으로 처리
 def tableDataParsing(td, csvFile):
+    # 각 셀을 큰따옴표로 구분짓기 위한 문자열
+    # 구분 문자인 ","이 테이블 내에서도 텍스트의 형태로 나타날 시에 csv 파일에서 두 문자를 구분하도로 하기 위함
+    parsedText = ""
+
     # td 안의 텍스트와 태그를 모두 추출
     for data in td.descendants:
         if type(data) == NavigableString:
             # td 내부의 텍스트는 상속된 태그에 관계없이 하나의 텍스트로 간주
-            csvFile.write(data.strip())
+            parsedText += data.strip()
         elif type(data) == Tag:
             if data.name == "br":
                 # 만약 </br>이라면 줄내림 대신 띄어쓰기로 처리
-                csvFile.write(" ")
+                parsedText += " "
             elif data.name == "td":
                 # td 태그에 상속되어 있는 td 태그의 경우,
-                # tr과 달리 상속된 태그의 텍스트로서 추출이 가능하나 서로 다른 td끼리 분리시켜야 하므로 ", "만 입력
-                csvFile.write(", ")
+                # tr과 달리 상속된 태그의 텍스트로서 추출이 가능하나 서로 다른 td끼리 분리시켜야 하므로 구분 문자만 입력
+                parsedText = parsedText.strip() + "\", \""
             elif data.name == "tr":
                 # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
-                csvFile.write("\n")
+                csvFile.write("\"" + parsedText.strip() + "\"\n")
                 tableRowParsing(data, csvFile)
                 break
+    
+    # 문자열을 "로 감싸서 작성
+    csvFile.write("\"" + parsedText.strip() + "\"")
 
 # 행에서 td 태그만 추려내어 데이터 탐색
 def tableRowParsing(tr, csvFile):
