@@ -79,23 +79,24 @@ def tableExtractor(seed, includeString, fileName="result", robotsProtocol=[]):
         res = requests.get(url, timeout=1)
 
         # 접속 결과 출력
-        if res.status_code == 200:
-            print("접속 성공 : " + url)
-        else:
+        if res.status_code != 200:
             print("접속 실패 : " + url)
-        
-        # beautiful soup 객체 변환
-        html = bs(res.text, "html.parser")
+        else:
+            # 접속 성공 시 접속 성공 문구와 함께 html 구문 분석 실행
+            print("접속 성공 : " + url)
+            
+            # beautiful soup 객체 변환
+            html = bs(res.text, "html.parser")
 
-        # 만조시각 텍스트를 가진 태그 탐색
-        targetTable = html.find_all(lambda tag : tag.string and includeString in tag.string)[0]
+            # 만조시각 텍스트를 가진 태그 탐색
+            targetTable = html.find_all(lambda tag : tag.string and includeString in tag.string)[0]
 
-        # 해당 태그를 가지고 있는 table 태그 추적
-        while targetTable.name != "table":
-            targetTable = targetTable.parent
+            # 해당 태그를 가지고 있는 table 태그 추적
+            while targetTable.name != "table":
+                targetTable = targetTable.parent
 
-        # table 태그의 각 열과 행의 데이터 수집
-        tableToCSV(targetTable, resultCSV)
+            # table 태그의 각 열과 행의 데이터 수집
+            tableToCSV(targetTable, resultCSV)
 
     resultCSV.close()
 
