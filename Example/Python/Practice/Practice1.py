@@ -25,19 +25,18 @@ def tableDataParser(td, csvFile):
             elif data.name == "tr":
                 # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
-                csvFile.write("\"" + parsedText.strip() + "\"\n")
+                csvFile.write("\"" + parsedText.strip() + "\", \n")
                 tableRowParser(data, csvFile)
                 return
     
     # 문자열을 "로 감싸서 작성
-    csvFile.write("\"" + parsedText.strip() + "\"")
+    csvFile.write("\"" + parsedText.strip() + "\", ")
 
 # 행에서 td 태그만 추려내어 데이터 탐색
 def tableRowParser(tr, csvFile):
     for col in tr.children:
         if type(col) == Tag and col.name == "td":
             tableDataParser(col, csvFile)
-            csvFile.write(", ")
 
 # 추출한 html 파일의 </td> 태그(closing tag) 누락 문제로 함수의 형태로 사용
 # tableRowParsing과 tableDataParsing을 이용한 재귀적인 처리를 위함
