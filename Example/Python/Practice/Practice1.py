@@ -27,7 +27,7 @@ def tableDataParser(td, csvFile):
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
                 csvFile.write("\"" + parsedText.strip() + "\"\n")
                 tableRowParser(data, csvFile)
-                break
+                return
     
     # 문자열을 "로 감싸서 작성
     csvFile.write("\"" + parsedText.strip() + "\"")
