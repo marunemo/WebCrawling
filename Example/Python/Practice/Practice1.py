@@ -4,7 +4,7 @@ from bs4.element import NavigableString, Tag
 
 # 열의 데이터 중 문자열만 추출하여 작성
 # </td>(td closing tag)가 없을 경우에 td 태그에 상속되어 있는 tr이나 td를 재귀적으로 처리
-def tableDataParsing(td, csvFile):
+def tableDataParser(td, csvFile):
     # 각 셀을 큰따옴표로 구분짓기 위한 문자열
     # 구분 문자인 ","이 테이블 내에서도 텍스트의 형태로 나타날 시에 csv 파일에서 두 문자를 구분하도로 하기 위함
     parsedText = ""
@@ -26,17 +26,17 @@ def tableDataParsing(td, csvFile):
                 # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
                 csvFile.write("\"" + parsedText.strip() + "\"\n")
-                tableRowParsing(data, csvFile)
+                tableRowParser(data, csvFile)
                 break
     
     # 문자열을 "로 감싸서 작성
     csvFile.write("\"" + parsedText.strip() + "\"")
 
 # 행에서 td 태그만 추려내어 데이터 탐색
-def tableRowParsing(tr, csvFile):
+def tableRowParser(tr, csvFile):
     for col in tr.children:
         if type(col) == Tag and col.name == "td":
-            tableDataParsing(col, csvFile)
+            tableDataParser(col, csvFile)
             csvFile.write(", ")
 
 # 추출한 html 파일의 </td> 태그(closing tag) 누락 문제로 함수의 형태로 사용
@@ -44,63 +44,69 @@ def tableRowParsing(tr, csvFile):
 def tableToCSV(table, csvFile):
     for row in table.children:
         if type(row) == Tag and row.name == "tr":
-            tableRowParsing(row, csvFile)
+            tableRowParser(row, csvFile)
             csvFile.write('\n')
 
-# 대상 URL
-targetURL = "https://www.badatime.com"
+def robotsTxtParser(targetURL):
+    robotsTxt = requests.get(targetURL + "/robots.txt")
+    if robotsTxt.status_code != 200:
+        raise Exception("HTTP 상태 코드: " + str(robotsTxt.status_code))
 
-# robots.txt 확인
-robotsTxt = requests.get(targetURL + "/robots.txt")
-
-# 접근할 수 없을 시 오류 출력
-if robotsTxt.status_code != 200:
-    raise Exception("HTTP 상태 코드: " + str(robotsTxt.status_code))
-
-# 결과 출력 파일
-resultCSV = open("result.csv", "w", encoding="utf-8")
-
-# 크롤링할 수 있는 지 탐색
-searchAble = {"User-agent" : [], "Allow" : [], "Disallow" : []}
-for line in robotsTxt.text.replace("\r", "").split("\n"):
-    key, value = line.split(": ")
-    if key in searchAble:
-        searchAble[key].extend(value.split())
-    else:
-        searchAble[key] = [value]
-
-# 탐색할 URL 시드 입력
-seed = []
-seed.append("https://www.badatime.com/127-2022-09-01.html")
-
-# 주어진 URL들로부터 html 데이터 탐색
-for url in seed:
-    if "*" in searchAble["User-agent"]:
-        for disallowPath in searchAble["Disallow"]:
-            if targetURL + disallowPath in url:
-                raise Exception(url + "은 " + disallowPath + "에 의하여 접근이 제한되어있습니다.")
+    robotsProtocol = {"User-agent" : [], "Allow" : [], "Disallow" : []}
+    for line in robotsTxt.text.replace("\r", "").split("\n"):
+        key, value = line.split(": ")
+        if key in robotsProtocol:
+            robotsProtocol[key].extend(value.split())
+        else:
+            robotsProtocol[key] = [value]
     
-    # 만약 접근 가능한 URL이라면 get 방식 접근
-    res = requests.get(url, timeout=1)
+    return robotsProtocol
 
-    # 접속 결과 출력
-    if res.status_code == 200:
-        print("접속 성공 : " + url)
-    else:
-        print("접속 실패 : " + url)
-    
-    # beautiful soup 객체 변환
-    # html = bs(res.text, "html.parser")
-    html = bs(res.text, "html.parser")
+def tableExtractor(seed, includeString, fileName="result", robotsProtocol=[]):
+    # 결과 출력 파일
+    resultCSV = open(fileName + ".csv", "w", encoding="utf-8")
 
-    # 만조시각 텍스트를 가진 태그 탐색
-    targetTable = html.find_all(lambda tag : tag.string and "만조시각" in tag.string)[0]
+    # 주어진 URL들로부터 html 데이터 탐색
+    for url in seed:
+        if "*" in robotsProtocol["User-agent"]:
+            for disallowPath in robotsProtocol["Disallow"]:
+                if targetURL + disallowPath in url:
+                    raise Exception(url + "은 " + disallowPath + "에 의하여 접근이 제한되어있습니다.")
+        
+        # 만약 접근 가능한 URL이라면 get 방식 접근
+        res = requests.get(url, timeout=1)
 
-    # 해당 태그를 가지고 있는 table 태그 추적
-    while targetTable.name != "table":
-        targetTable = targetTable.parent
+        # 접속 결과 출력
+        if res.status_code == 200:
+            print("접속 성공 : " + url)
+        else:
+            print("접속 실패 : " + url)
+        
+        # beautiful soup 객체 변환
+        html = bs(res.text, "html.parser")
 
-    # table 태그의 각 열과 행의 데이터 수집
-    tableToCSV(targetTable, resultCSV)
+        # 만조시각 텍스트를 가진 태그 탐색
+        targetTable = html.find_all(lambda tag : tag.string and includeString in tag.string)[0]
 
-resultCSV.close()
+        # 해당 태그를 가지고 있는 table 태그 추적
+        while targetTable.name != "table":
+            targetTable = targetTable.parent
+
+        # table 태그의 각 열과 행의 데이터 수집
+        tableToCSV(targetTable, resultCSV)
+
+    resultCSV.close()
+
+if __name__ == "__main__":
+    # 대상 URL
+    targetURL = "https://www.badatime.com"
+
+    # robots.txt 파일로부터 규칙 다운로드
+    robotsProtocol = robotsTxtParser(targetURL)
+
+    # 탐색할 URL 시드 입력
+    seed = []
+    seed.append("https://www.badatime.com/127-2022-09-01.html")
+
+    # 테이블 추출
+    tableExtractor(seed, "만조시각", "result", robotsProtocol)
