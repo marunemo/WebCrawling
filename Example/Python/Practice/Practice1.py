@@ -75,6 +75,9 @@ def tableToCSV(table, csvFile):
 
 # robots.txt 파일을 map 형식으로 변환
 def robotsTxtParser(targetURL: str):
+    if not targetURL.startswith("http"):
+        targetURL = "http://" + targetURL
+
     robotsTxt = requests.get(targetURL + "/robots.txt")
     if robotsTxt.status_code != 200:
         raise Exception("HTTP 상태 코드: " + str(robotsTxt.status_code))
@@ -97,6 +100,9 @@ def tableExtractor(seed: list, includeString: str, robotsProtocol: list = [], fi
 
     # 주어진 URL들로부터 html 데이터 탐색
     for index, url in enumerate(seed):
+        if not url.startswith("http"):
+            url = "http://" + url
+
         if "*" in robotsProtocol["User-agent"]:
             for disallowPath in robotsProtocol["Disallow"]:
                 if targetURL + disallowPath in url:
@@ -106,10 +112,7 @@ def tableExtractor(seed: list, includeString: str, robotsProtocol: list = [], fi
         
         # 결과 출력 파일
         if fileNames == []:
-            if url.startswith("http"):
-                fileName = url[url.index("/", len("https://") + 1) + 1:]
-            else:
-                fileName = url[url.index("/") + 1:]
+            fileName = url[url.index("/", len("https://") + 1) + 1:]
             resultCSV = open(fileName + ".csv", "w", encoding="utf-8")
         else:
             resultCSV = open(fileNames[index] + ".csv", "w", encoding="utf-8")
@@ -141,14 +144,22 @@ def tableExtractor(seed: list, includeString: str, robotsProtocol: list = [], fi
 
 if __name__ == "__main__":
     # 대상 URL
-    targetURL = "https://www.badatime.com"
+    targetURL = "www.badatime.com"
 
     # robots.txt 파일로부터 규칙 다운로드
     robotsProtocol = robotsTxtParser(targetURL)
 
     # 탐색할 URL 시드 입력
     seed = []
-    seed.append("https://www.badatime.com/127-2022-09-01.html")
+    seed.append("https://www.badatime.com/127-2021-09-01.html")
+    seed.append("www.badatime.com/127-2021-10-01.html")
+    seed.append("http://www.badatime.com/127-2021-11-01.html")
+
+    # 수동 파일명 지정
+    fileNames = []
+    fileNames.append("2021년 9월")
+    fileNames.append("2021년 10월")
+    fileNames.append("2021년 11월")
 
     # 테이블 추출
-    tableExtractor(seed, "만조시각", robotsProtocol)
+    tableExtractor(seed, "만조시각", robotsProtocol, fileNames)
