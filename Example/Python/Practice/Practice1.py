@@ -9,6 +9,12 @@ def tableDataParser(td, csvFile):
     # 구분 문자인 ","이 테이블 내에서도 텍스트의 형태로 나타날 시에 csv 파일에서 두 문자를 구분하도로 하기 위함
     parsedText = ""
 
+    # 병합된 셀과 다른 셀의 열을 맞추기 위함
+    if td.has_attr("colspan") and int(td["colspan"]) > 1:
+        colspan = int(td["colspan"])
+    else:
+        colspan = 1
+
     # td 안의 텍스트와 태그를 모두 추출
     for data in td.descendants:
         if type(data) == NavigableString:
@@ -21,16 +27,37 @@ def tableDataParser(td, csvFile):
             elif data.name == "td":
                 # td 태그에 상속되어 있는 td 태그의 경우,
                 # tr과 달리 상속된 태그의 텍스트로서 추출이 가능하나 서로 다른 td끼리 분리시켜야 하므로 구분 문자만 입력
+                
+                # 현재 병합된 열 개수만큼 공백 추가
+                for _ in range(colspan - 1):
+                    parsedText += "\", \"" 
+                
                 parsedText = parsedText.strip() + "\", \""
+
+                # 만약 이번 td도 병합되어 있다면 그 개수 추가
+                if td.has_attr("colspan") and int(td["colspan"]) > 1:
+                    colspan = int(td["colspan"])
+                else:
+                    colspan = 1
             elif data.name == "tr":
                 # 만약 td 태그 내에 tr이 상속되어 있다면 해당 태그를 tr 태그로서 처리
                 # 또한, tr 태그가 나왔다는 것은 td 태그가 끝났다는 의미이므로, 즉시 td 내부 탐색을 종료
+
+                # 현재 병합된 열 개수만큼 공백 추가
+                for _ in range(colspan - 1):
+                    parsedText += "\", \""
+
                 csvFile.write("\"" + parsedText.strip() + "\", \n")
                 tableRowParser(data, csvFile)
                 return
     
+    # 현재 병합된 열 개수만큼 공백 추가
+    for _ in range(colspan - 1):
+        parsedText += "\", \""
+
     # 문자열을 "로 감싸서 작성
     csvFile.write("\"" + parsedText.strip() + "\", ")
+
 
 # 행에서 td 태그만 추려내어 데이터 탐색
 def tableRowParser(tr, csvFile):
