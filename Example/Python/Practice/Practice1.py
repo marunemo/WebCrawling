@@ -74,7 +74,7 @@ def tableToCSV(table, csvFile):
             csvFile.write('\n')
 
 # robots.txt 파일을 map 형식으로 변환
-def robotsTxtParser(targetURL):
+def robotsTxtParser(targetURL: str):
     robotsTxt = requests.get(targetURL + "/robots.txt")
     if robotsTxt.status_code != 200:
         raise Exception("HTTP 상태 코드: " + str(robotsTxt.status_code))
@@ -90,7 +90,7 @@ def robotsTxtParser(targetURL):
     return robotsProtocol
 
 # 특정 단어가 포함된 표를 csv 파일의 형식으로 출력
-def tableExtractor(seed, includeString, fileName="result", robotsProtocol=[]):
+def tableExtractor(seed: list, includeString: str, fileName: str = "result", robotsProtocol: list = []):
     # 결과 출력 파일
     resultCSV = open(fileName + ".csv", "w", encoding="utf-8")
 
