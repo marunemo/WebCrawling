@@ -90,17 +90,30 @@ def robotsTxtParser(targetURL: str):
     return robotsProtocol
 
 # 특정 단어가 포함된 표를 csv 파일의 형식으로 출력
-def tableExtractor(seed: list, includeString: str, fileName: str = "result", robotsProtocol: list = []):
-    # 결과 출력 파일
-    resultCSV = open(fileName + ".csv", "w", encoding="utf-8")
+def tableExtractor(seed: list, includeString: str, robotsProtocol: list = [], fileNames: list = []):
+
+    if fileNames != [] and len(seed) != len(fileNames):
+        raise Exception("URL의 개수와 저장 파일의 개수가 다릅니다.")
 
     # 주어진 URL들로부터 html 데이터 탐색
-    for url in seed:
+    for index, url in enumerate(seed):
         if "*" in robotsProtocol["User-agent"]:
             for disallowPath in robotsProtocol["Disallow"]:
                 if targetURL + disallowPath in url:
                     raise Exception(url + "은 " + disallowPath + "에 의하여 접근이 제한되어있습니다.")
+        else:
+            raise Exception("User-agnet에 의하여 접근이 제한되어있습니다.")
         
+        # 결과 출력 파일
+        if fileNames == []:
+            if url.startswith("http"):
+                fileName = url[url.index("/", len("https://") + 1) + 1:]
+            else:
+                fileName = url[url.index("/") + 1:]
+            resultCSV = open(fileName + ".csv", "w", encoding="utf-8")
+        else:
+            resultCSV = open(fileNames[index] + ".csv", "w", encoding="utf-8")
+
         # 만약 접근 가능한 URL이라면 get 방식 접근
         res = requests.get(url, timeout=1)
 
@@ -123,8 +136,8 @@ def tableExtractor(seed: list, includeString: str, fileName: str = "result", rob
 
             # table 태그의 각 열과 행의 데이터 수집
             tableToCSV(targetTable, resultCSV)
-
-    resultCSV.close()
+        
+        resultCSV.close()
 
 if __name__ == "__main__":
     # 대상 URL
@@ -138,4 +151,4 @@ if __name__ == "__main__":
     seed.append("https://www.badatime.com/127-2022-09-01.html")
 
     # 테이블 추출
-    tableExtractor(seed, "만조시각", "result", robotsProtocol)
+    tableExtractor(seed, "만조시각", robotsProtocol)
